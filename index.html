@@ -1,1 +1,395 @@
-Welcome!
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OhPoland — Interesting facts & stats about Poland</title>
+  <meta name="description" content="Interesting facts and stats about Poland — one number at a time." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red: #B5334A;
+      --text-primary: #1a1a1a;
+      --text-secondary: #555;
+      --text-muted: #999;
+      --bg: #fff;
+      --bg-secondary: #f5f5f3;
+      --border: rgba(0,0,0,0.1);
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      max-width: 100%;
+    }
+
+    .navbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .navbar-logo .site-title {
+      font-size: 20px;
+      margin-bottom: 0;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover { color: var(--red); }
+    .nav-links a.active { color: var(--text-primary); font-weight: 500; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--text-primary);
+      border-radius: 2px;
+      transition: all 0.2s;
+    }
+
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      gap: 0;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .mobile-menu a {
+      font-size: 15px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 0.9rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .mobile-menu a:hover { color: var(--red); background: var(--bg-secondary); }
+    .mobile-menu.open { display: flex; }
+
+    @media (max-width: 560px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 0.5rem;
+    }
+
+    .flag {
+      width: 36px;
+      height: 24px;
+      border-radius: 3px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--border);
+    }
+    .flag-white { flex: 1; background: #fff; }
+    .flag-red { flex: 1; background: var(--red); }
+
+    .site-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 30px;
+      letter-spacing: -0.5px;
+      color: var(--text-primary);
+    }
+    .site-title span { color: var(--red); }
+
+    .tagline {
+      font-size: 15px;
+      color: var(--text-secondary);
+      margin-bottom: 3rem;
+    }
+
+    /* Section label */
+    .section-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    /* Stats grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 3rem;
+    }
+
+    .stat-card {
+      background: var(--bg-secondary);
+      border-radius: 10px;
+      padding: 1.25rem;
+    }
+
+    .stat-number {
+      font-family: 'DM Serif Display', serif;
+      font-size: 30px;
+      color: var(--text-primary);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    /* Divider */
+    hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2.5rem 0;
+    }
+
+    /* Fact list */
+    .fact-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 3rem;
+    }
+
+    .fact-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.1rem 1.25rem;
+    }
+
+    .fact-icon {
+      font-size: 22px;
+      flex-shrink: 0;
+      width: 34px;
+      text-align: center;
+    }
+
+    .fact-title {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .fact-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Did you know */
+    .did-you-know {
+      background: var(--bg-secondary);
+      border-left: 3px solid var(--red);
+      border-radius: 0 10px 10px 0;
+      padding: 1.1rem 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .dyk-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 8px;
+    }
+
+    .dyk-text {
+      font-size: 14px;
+      color: var(--text-primary);
+      line-height: 1.7;
+    }
+
+    /* Footer */
+    .footer {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .site-title { font-size: 24px; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="#" class="navbar-logo">
+      <div class="flag">
+        <div class="flag-white"></div>
+        <div class="flag-red"></div>
+      </div>
+      <span style="font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--text-primary);">Oh<span style="color:var(--red)">Poland</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#" class="active">Home</a></li>
+      <li><a href="#stats">General Stats</a></li>
+      <li><a href="#insights">Insights</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#">Home</a>
+    <a href="#stats">General Stats</a>
+    <a href="#insights">Insights</a>
+    <a href="#contact">Contact</a>
+  </div>
+
+  <div class="container">
+
+    <div class="header">
+      <div class="flag">
+        <div class="flag-white"></div>
+        <div class="flag-red"></div>
+      </div>
+      <h1 class="site-title">Oh<span>Poland</span></h1>
+    </div>
+    <p class="tagline">Interesting facts & stats about Poland — one number at a time.</p>
+
+    <p class="section-label" id="stats">Poland by numbers</p>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number">38M</div>
+        <div class="stat-label">Population (2024)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">312K</div>
+        <div class="stat-label">km² — 9th largest in Europe</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">#21</div>
+        <div class="stat-label">Largest economy in the world</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">17</div>
+        <div class="stat-label">Nobel Prize winners</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">1,000+</div>
+        <div class="stat-label">Years of recorded history</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">16</div>
+        <div class="stat-label">Administrative provinces</div>
+      </div>
+    </div>
+
+    <hr />
+
+    <p class="section-label" id="insights">Fun facts</p>
+    <div class="fact-list">
+      <div class="fact-item">
+        <div class="fact-icon">🥟</div>
+        <div>
+          <div class="fact-title">Poland invented the pierogi</div>
+          <div class="fact-desc">Poles have been eating these stuffed dumplings since at least the 13th century. Over 700 million pierogi are eaten in Poland every year.</div>
+        </div>
+      </div>
+      <div class="fact-item">
+        <div class="fact-icon">🌲</div>
+        <div>
+          <div class="fact-title">Home to Europe's last primeval forest</div>
+          <div class="fact-desc">Białowieża Forest spans the border of Poland and Belarus and is the last and largest ancient forest in Europe — home to wild bison.</div>
+        </div>
+      </div>
+      <div class="fact-item">
+        <div class="fact-icon">🎮</div>
+        <div>
+          <div class="fact-title">A gaming powerhouse</div>
+          <div class="fact-desc">CD Projekt RED, makers of The Witcher and Cyberpunk 2077, is one of the world's most valuable game studios — based in Warsaw.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="did-you-know">
+      <div class="dyk-label">Did you know?</div>
+      <p class="dyk-text">Poland rebuilt its capital Warsaw almost entirely from scratch after World War II, when 85% of the city was destroyed. The Old Town was reconstructed so faithfully it earned a UNESCO World Heritage Site designation.</p>
+    </div>
+
+    <div id="contact" style="margin-top: 1rem;">
+      <p class="section-label">Contact</p>
+      <div class="fact-item" style="flex-direction: column; gap: 8px;">
+        <div class="fact-title">Get in touch</div>
+        <div class="fact-desc">Have a cool Polish stat or fact to share? Send it our way!</div>
+        <a href="mailto:hello@ohpoland.com" style="font-size: 14px; color: var(--red); text-decoration: none; margin-top: 4px;">hello@ohpoland.com</a>
+      </div>
+    </div>
+
+    <hr />
+    <p class="footer">OhPoland.com — facts updated regularly. Data sourced from GUS, World Bank & Eurostat.</p>
+
+  </div>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('open');
+    }
+  </script>
+</body>
+</html>
