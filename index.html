@@ -312,32 +312,12 @@
     <p class="tagline">Interesting facts & stats about Poland — one number at a time.</p>
 
     <p class="section-label" id="stats">Poland by numbers</p>
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-number">38M</div>
-        <div class="stat-label">Population (2024)</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">312K</div>
-        <div class="stat-label">km² — 9th largest in Europe</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">#21</div>
-        <div class="stat-label">Largest economy in the world</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">17</div>
-        <div class="stat-label">Nobel Prize winners</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">1,000+</div>
-        <div class="stat-label">Years of recorded history</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">16</div>
-        <div class="stat-label">Administrative provinces</div>
-      </div>
+    <div class="stats-grid" id="statsGrid">
+      <!-- Populated dynamically by JS -->
     </div>
+    <p style="font-size:12px; color:var(--text-muted); margin-top:-1.5rem; margin-bottom:3rem;">
+      Showing 6 randomly selected stats. <a href="#" onclick="renderStats(); return false;" style="color:var(--red); text-decoration:none;">Refresh for new ones ↺</a>
+    </p>
 
     <hr />
 
@@ -386,10 +366,144 @@
   </div>
 
   <script>
+    // ─── POLAND STATS DATABASE ───────────────────────────────────────────────
+    const STATS = [
+      { id: 1,  number: "38M",      label: "Population (2024)" },
+      { id: 2,  number: "312,696",  label: "km² total area" },
+      { id: 3,  number: "#20",      label: "Largest economy by nominal GDP globally" },
+      { id: 4,  number: "#5",       label: "Largest EU economy by PPP-adjusted GDP" },
+      { id: 5,  number: "17",       label: "UNESCO World Heritage Sites" },
+      { id: 6,  number: "16",       label: "Administrative voivodeships (provinces)" },
+      { id: 7,  number: "966",      label: "Year Poland officially adopted Christianity" },
+      { id: 8,  number: "1025",     label: "Year the Kingdom of Poland was established" },
+      { id: 9,  number: "1791",     label: "Year Poland adopted Europe's first modern constitution" },
+      { id: 10, number: "123",      label: "Years Poland was wiped off the map (1795–1918)" },
+      { id: 11, number: "1918",     label: "Year Poland regained independence after WWI" },
+      { id: 12, number: "6M+",      label: "Polish citizens killed in World War II" },
+      { id: 13, number: "85%",      label: "Of Warsaw destroyed in WWII" },
+      { id: 14, number: "0.906",    label: "Human Development Index score (very high, 35th globally)" },
+      { id: 15, number: "$1.1T",    label: "Nominal GDP (2026 estimate)" },
+      { id: 16, number: "$2.1T",    label: "GDP by purchasing power parity (2026 estimate)" },
+      { id: 17, number: "$30,651",  label: "GDP per capita (nominal, 2026)" },
+      { id: 18, number: "26.3",     label: "Gini coefficient — one of EU's lowest inequality scores (2022)" },
+      { id: 19, number: "126/km²",  label: "Population density" },
+      { id: 20, number: "38th",     label: "Most populous country in the world" },
+      { id: 21, number: "5th",      label: "Most populous EU member state" },
+      { id: 22, number: "9th",      label: "Largest country in Europe by area" },
+      { id: 23, number: "23",       label: "National parks in Poland" },
+      { id: 24, number: "100+",     label: "Official Historic Monuments across the country" },
+      { id: 25, number: "1364",     label: "Year the Jagiellonian University (one of Europe's oldest) was founded" },
+      { id: 26, number: "1569",     label: "Year the Polish–Lithuanian Commonwealth was formed" },
+      { id: 27, number: "1M km²",   label: "Peak size of the Polish–Lithuanian Commonwealth — the largest state in Europe at the time" },
+      { id: 28, number: "1683",     label: "Year Poland halted the Ottoman advance into Europe at the Battle of Vienna" },
+      { id: 29, number: "500,000",  label: "Years ago first humans settled on Polish soil" },
+      { id: 30, number: "5500 BC",  label: "Earliest evidence of European cheesemaking found in Polish Kuyavia" },
+      { id: 31, number: "3400 BC",  label: "Date of the Bronocice pot — earliest known depiction of a wheeled vehicle" },
+      { id: 32, number: "1",        label: "Poland was 1st post-communist country to hold free elections in 1989" },
+      { id: 33, number: "1989",     label: "Year Poland re-established liberal democracy, first of its neighbours" },
+      { id: 34, number: "1999",     label: "Year Poland joined NATO" },
+      { id: 35, number: "2004",     label: "Year Poland joined the European Union" },
+      { id: 36, number: "17",       label: "Nobel Prize winners with Polish roots" },
+      { id: 37, number: "7",        label: "Polish Nobel Prize winners in Literature" },
+      { id: 38, number: "+48",      label: "Poland's international calling code" },
+      { id: 39, number: ".pl",      label: "Poland's internet country code TLD" },
+      { id: 40, number: "PLN",      label: "Poland's currency: the Złoty" },
+      { id: 41, number: "1473",     label: "Birth year of Nicolaus Copernicus, the Polish astronomer who proposed heliocentrism" },
+      { id: 42, number: "1867",     label: "Birth year of Marie Curie (Maria Skłodowska), two-time Nobel Prize winner" },
+      { id: 43, number: "2",        label: "Nobel Prizes won by Marie Curie — still a world record for a woman" },
+      { id: 44, number: "1410",     label: "Year of the Battle of Grunwald — one of medieval Europe's largest battles" },
+      { id: 45, number: "1264",     label: "Year the Statute of Kalisz granted unprecedented rights to Polish Jews" },
+      { id: 46, number: "1791",     label: "Year Poland established the Commission of National Education — first in Europe" },
+      { id: 47, number: "1783",     label: "Year Poland officially banned corporal punishment of schoolchildren" },
+      { id: 48, number: "98.8%",    label: "Of the population identifies as ethnically Polish (2021)" },
+      { id: 49, number: "71.3%",    label: "Of Poland's population identifies as Roman Catholic (2021)" },
+      { id: 50, number: "Warsaw",   label: "Capital and largest city of Poland" },
+      { id: 51, number: "Kraków",   label: "Former royal capital and cultural heart of Poland" },
+      { id: 52, number: "Gdańsk",   label: "Historic port city where WWII began — and where Solidarity movement was born" },
+      { id: 53, number: "1980",     label: "Year the Solidarity trade union movement emerged, helping end communism" },
+      { id: 54, number: "Poznań",   label: "City regarded as the cradle of the Polish state, est. ~10th century" },
+      { id: 55, number: "Wrocław",  label: "City on the Oder River, known as the 'City of 100 Bridges'" },
+      { id: 56, number: "100+",     label: "Bridges in Wrocław — one of the most bridge-rich cities in Europe" },
+      { id: 57, number: "Zakopane", label: "Poland's mountain resort capital in the Tatra Mountains" },
+      { id: 58, number: "2,499m",   label: "Height of Rysy — the highest peak in Poland (in the Tatra Mountains)" },
+      { id: 59, number: "Baltic",   label: "Sea bordering Poland to the north" },
+      { id: 60, number: "7",        label: "Countries sharing a border with Poland" },
+      { id: 61, number: "Germany",  label: "Poland's western neighbour and largest trading partner" },
+      { id: 62, number: "Białowieża", label: "Europe's last and largest primeval forest — spans Poland and Belarus" },
+      { id: 63, number: "Wisent",   label: "European bison (żubr) — the heaviest land animal in Europe, found in Białowieża" },
+      { id: 64, number: "500+",     label: "European bison living freely in Białowieża Forest" },
+      { id: 65, number: "1918",     label: "Year the European bison was hunted to extinction in the wild — later reintroduced from captivity" },
+      { id: 66, number: "Pierogi",  label: "Poland's most iconic dish — stuffed dumplings eaten since the 13th century" },
+      { id: 67, number: "Vodka",    label: "Poland is one of the world's top producers — disputes with Russia over its origin" },
+      { id: 68, number: "Kielbasa", label: "Polish sausage — a staple of Polish cuisine eaten at every celebration" },
+      { id: 69, number: "CD Projekt", label: "Warsaw-based studio behind The Witcher and Cyberpunk 2077 — one of the world's most valuable game studios" },
+      { id: 70, number: "Chopin",   label: "Frédéric Chopin, born 1810 in Poland — considered the greatest Romantic piano composer" },
+      { id: 71, number: "1810",     label: "Birth year of Frédéric Chopin" },
+      { id: 72, number: "Copernicus", label: "Nicolaus Copernicus — Polish astronomer who revolutionised our understanding of the solar system" },
+      { id: 73, number: "Stanisław Lem", label: "Author of Solaris (1961) — Poland's greatest science fiction writer" },
+      { id: 74, number: "Solidarity", label: "Polish trade union that sparked a revolution — key driver in the fall of the Iron Curtain" },
+      { id: 75, number: "Lech Wałęsa", label: "Polish electrician who led Solidarity and became President — 1983 Nobel Peace Prize winner" },
+      { id: 76, number: "1983",     label: "Year Lech Wałęsa was awarded the Nobel Peace Prize" },
+      { id: 77, number: "John Paul II", label: "Karol Wojtyła from Wadowice, Poland — became Pope in 1978; first non-Italian pope in 455 years" },
+      { id: 78, number: "1978",     label: "Year Karol Wojtyła became Pope John Paul II" },
+      { id: 79, number: "Copernican Revolution", label: "Poland gave the world the heliocentric model of the solar system" },
+      { id: 80, number: "1st",      label: "Poland adopted Europe's first codified national constitution (3 May 1791)" },
+      { id: 81, number: "Tatra",    label: "Mountain range in southern Poland shared with Slovakia — a major tourist destination" },
+      { id: 82, number: "3,500km", label: "Total length of Poland's rivers, including the Vistula and Oder" },
+      { id: 83, number: "Vistula",  label: "Poland's longest river at 1,047 km — flows through Warsaw and Kraków" },
+      { id: 84, number: "1,047km",  label: "Length of the Vistula — Poland's longest river" },
+      { id: 85, number: "Amber",    label: "Poland's Baltic coast holds one of the world's richest deposits of amber" },
+      { id: 86, number: "90%",      label: "Of the world's amber comes from the Baltic region, largely Poland" },
+      { id: 87, number: "Masurian Lakes", label: "Poland's 'Land of a Thousand Lakes' — over 2,000 lakes in northeast Poland" },
+      { id: 88, number: "2,000+",   label: "Lakes in the Masurian Lake District — Poland's most popular natural holiday destination" },
+      { id: 89, number: "Wieliczka", label: "Salt mine near Kraków operating since the 13th century — UNESCO World Heritage Site" },
+      { id: 90, number: "700 years", label: "Duration of Wieliczka Salt Mine's operation — one of the world's oldest businesses" },
+      { id: 91, number: "Auschwitz", label: "Site of the largest Nazi concentration camp, in Oświęcim, Poland — now a UNESCO site and memorial" },
+      { id: 92, number: "1.1M+",    label: "People killed at Auschwitz-Birkenau — mostly Jewish victims of the Holocaust" },
+      { id: 93, number: "Enigma",   label: "Polish mathematicians Rejewski, Różycki and Zygalski first cracked the Nazi Enigma code in 1932" },
+      { id: 94, number: "1932",     label: "Year Polish mathematicians first broke the German Enigma cipher — years before Bletchley Park" },
+      { id: 95, number: "Lwów School", label: "Polish mathematical school of the 1930s — one of the most influential in 20th century mathematics" },
+      { id: 96, number: "Stefan Banach", label: "Polish mathematician who founded modern functional analysis — a giant of 20th century maths" },
+      { id: 97, number: "PKN Orlen", label: "Poland's largest company by revenue — a major Central European energy firm" },
+      { id: 98, number: "Łódź",     label: "Poland's third largest city — once the 'Manchester of Poland' due to its textile industry" },
+      { id: 99, number: "1%",       label: "Of GDP that Polish taxpayers can voluntarily direct to NGOs via their tax return" },
+      { id: 100, number: "Free",    label: "University education in Poland is free for Polish citizens at public universities" },
+      { id: 101, number: "Universal", label: "Poland provides universal healthcare to all citizens" },
+      { id: 102, number: "Schengen", label: "Poland is part of the Schengen Area — no border checks with most EU neighbours" },
+      { id: 103, number: "NATO",    label: "Poland joined NATO in 1999 and is one of its most active eastern members" },
+      { id: 104, number: "4%",      label: "Of GDP — Poland's 2024 defence spending target, one of the highest in NATO" },
+      { id: 105, number: "Mikołaj Rej", label: "Considered the father of Polish literature — wrote entirely in Polish in the 16th century" },
+    ];
+
+    // ─── RANDOM PICKER ───────────────────────────────────────────────────────
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function renderStats() {
+      const grid = document.getElementById('statsGrid');
+      const picked = shuffle(STATS).slice(0, 6);
+      grid.innerHTML = picked.map(s => `
+        <div class="stat-card">
+          <div class="stat-number">${s.number}</div>
+          <div class="stat-label">${s.label}</div>
+        </div>
+      `).join('');
+    }
+
+    // ─── MENU TOGGLE ─────────────────────────────────────────────────────────
     function toggleMenu() {
       const menu = document.getElementById('mobileMenu');
       menu.classList.toggle('open');
     }
+
+    // ─── INIT ─────────────────────────────────────────────────────────────────
+    renderStats();
   </script>
 </body>
 </html>
